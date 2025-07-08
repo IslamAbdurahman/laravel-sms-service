@@ -1,0 +1,27 @@
+{
+    "name": "islamabdurahman/laravel-sms-service",
+    "description": "Laravel package for sending SMS via multiple services",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "IslamAbdurahman\\SmsService\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "IslamAbdurahman\\SmsService\\Providers\\SmsServiceProvider"
+            ],
+            "aliases": {
+                "Sms": "IslamAbdurahman\\SmsService\\Facades\\SmsFacade"
+            }
+        }
+    },
+    "require": {
+        "php": ">=8.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "irazasyed/telegram-bot-sdk": "^3.14",
+        "illuminate/support": "^9.0|^10.0|^11.0"
+    }
+}
