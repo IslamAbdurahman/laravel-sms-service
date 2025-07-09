@@ -23,7 +23,7 @@ class SmsService
         }
     }
 
-    public static function eskiz($num, $message)
+    public static function eskiz($phone_number, $message)
     {
         $config = config('sms.eskiz');
         $token = Cache::remember($config['token_cache_key'], $config['token_lifetime'], function () use ($config) {
@@ -43,7 +43,7 @@ class SmsService
         $response = Http::withToken($token)
             ->asForm()
             ->post($config['api_url'] . 'message/sms/send', [
-                'mobile_phone' => $num,
+                'mobile_phone' => $phone_number,
                 'message' => $message,
                 'from' => $config['sender'],
             ]);
@@ -53,13 +53,13 @@ class SmsService
         return ($json['status'] ?? null) === 'waiting' ? 1 : 0;
     }
 
-    public static function sysdc($num, $message)
+    public static function sysdc($phone_number, $message)
     {
         $token = config('sms.sysdc_token');
         $url = 'https://sms.sysdc.ru/index.php';
 
         $res = Http::withToken($token)
-            ->attach('mobile_phone', $num)
+            ->attach('mobile_phone', $phone_number)
             ->attach('message', $message)
             ->post($url);
 
@@ -67,7 +67,7 @@ class SmsService
         return ($json->status ?? '') === 'waiting' ? 1 : 0;
     }
 
-    public static function playMobile($num, $message)
+    public static function playMobile($phone_number, $message)
     {
         $config = config('sms.playmobile');
         $key = $config['key'];
@@ -76,7 +76,7 @@ class SmsService
 
         $url = 'https://send.smsxabar.uz/broker-api/send';
         $data = [
-            'recipient' => $num,
+            'recipient' => $phone_number,
             'message-id' => uniqid(),
             'sms' => [
                 'originator' => $nickname,
@@ -91,7 +91,7 @@ class SmsService
         return $res->body() === 'Request is received' ? 1 : 0;
     }
 
-    public static function playMobileCall($num)
+    public static function playMobileCall($phone_number)
     {
         $config = config('sms.playmobile');
         $key = $config['key'];
@@ -101,7 +101,7 @@ class SmsService
 
         $url = 'https://send.smsxabar.uz/broker-api/send';
         $data = [
-            'recipient' => $num,
+            'recipient' => $phone_number,
             'message-id' => uniqid(),
             'sms' => [
                 'originator' => $nickname,
