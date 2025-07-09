@@ -33,7 +33,11 @@ SMS_PLAYMOBILE_NICKNAME=your_nickname
 SMS_PLAYMOBILE_CALL_FILE=audio.mp3
 
 # Eskiz SMS
-SMS_ESKIZ_TOKEN=your_token
+SMS_ESKIZ_EMAIL=test@eskiz.uz
+SMS_ESKIZ_PASSWORD=your_password
+SMS_ESKIZ_SENDER=4546
+SMS_ESKIZ_TOKEN_DURATION=2592000
+SMS_ESKIZ_URL=https://notify.eskiz.uz/api/
 
 # Sysdc
 SMS_SYSDS_TOKEN=your_token
