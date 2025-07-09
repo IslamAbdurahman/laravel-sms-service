@@ -25,16 +25,32 @@ class SmsService
 
     public static function eskiz($num, $message)
     {
-        $token = config('sms.eskiz_token');
-        $url = 'https://notify.eskiz.uz/api/message/sms/send';
+        $config = config('sms.eskiz');
+        $token = Cache::remember($config['token_cache_key'], $config['token_lifetime'], function () use ($config) {
+            $response = Http::asForm()->post($config['api_url'] . 'auth/login', [
+                'email' => $config['email'],
+                'password' => $config['password'],
+            ]);
 
-        $res = Http::withToken($token)
-            ->attach('mobile_phone', $num)
-            ->attach('message', $message)
-            ->post($url);
+            $json = $response->json();
+            if (isset($json['data']['token'])) {
+                return $json['data']['token'];
+            }
 
-        $json = json_decode($res->body());
-        return ($json->status ?? '') === 'waiting' ? 1 : 0;
+            throw new \Exception('Eskiz auth error: ' . ($json['message'] ?? 'Unknown'));
+        });
+
+        $response = Http::withToken($token)
+            ->asForm()
+            ->post($config['api_url'] . 'message/sms/send', [
+                'mobile_phone' => $num,
+                'message' => $message,
+                'from' => $config['sender'],
+            ]);
+
+        $json = $response->json();
+
+        return ($json['status'] ?? null) === 'waiting' ? 1 : 0;
     }
 
     public static function sysdc($num, $message)

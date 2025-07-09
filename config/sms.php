@@ -13,7 +13,12 @@ return [
     ],
 
     'eskiz' => [
-        'token' => env('SMS_ESKIZ_TOKEN'),
+        'email' => env('SMS_ESKIZ_EMAIL'),
+        'password' => env('SMS_ESKIZ_PASSWORD'),
+        'sender' => env('SMS_ESKIZ_SENDER', '4546'),
+        'token_cache_key' => 'eskiz_sms_token',
+        'token_lifetime' => env('SMS_ESKIZ_TOKEN_DURATION', 60 * 60 * 24 * 30), // default 30 days
+        'api_url' => env('SMS_ESKIZ_URL', 'https://notify.eskiz.uz/api/'),
     ],
 
     'sysdc' => [
